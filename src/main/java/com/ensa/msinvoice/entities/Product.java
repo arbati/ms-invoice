@@ -17,7 +17,7 @@ public class Product {
     private Double price;
     private String photo;
     private long depositQuantity;
-    private LocalDate expiryDate;
+    private String expiryDate;
     private String description;
 
 }
