@@ -5,6 +5,7 @@ import com.ensa.msinvoice.exceptions.DbException;
 import com.ensa.msinvoice.exceptions.EntityNotFoundException;
 import com.ensa.msinvoice.exceptions.IdAlreadyExistException;
 import com.ensa.msinvoice.repositories.InvoiceRepository;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public Optional<Invoice> getInvoiceById(String id) {
-        Optional<Invoice> optionalInvoice= invoiceRepository.findById(id);
+        Optional<Invoice> optionalInvoice = invoiceRepository.findById(id);
 
         if (optionalInvoice.isEmpty()) throw new EntityNotFoundException("Invoice not found");
 
@@ -32,14 +33,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public Page<Invoice> searchInvoices(String invoiceDate, int page, int size) {
+    public Page<Invoice> searchInvoices(LocalDate invoiceDate, int page, int size) {
 
         return invoiceRepository.getInvoicesByCriteria(invoiceDate, PageRequest.of(page, size));
     }
 
     @Override
     public Invoice addInvoice(Invoice invoice) throws DbException {
-      //if(this.getInvoiceById(invoice.getId()).isPresent()) throw new IdAlreadyExistException("Invoice id already exist!");
+      if(!this.getInvoiceById(invoice.getId()).isEmpty()) throw new IdAlreadyExistException("Invoice id already exist!");
        return invoiceRepository.save(invoice);
 
     }

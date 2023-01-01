@@ -12,7 +12,7 @@ public interface InvoiceService {
 
 
     Optional<Invoice> getInvoiceById(String id);
-    Page<Invoice> searchInvoices(String invoiceDate, int page, int size);
+    Page<Invoice> searchInvoices(LocalDate invoiceDate, int page, int size);
     Invoice addInvoice(Invoice invoice) throws IdAlreadyExistException;
     void deleteInvoice(String id);
     Invoice updateInvoice(String id,Invoice invoice);
