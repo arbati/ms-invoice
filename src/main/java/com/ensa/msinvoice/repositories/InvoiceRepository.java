@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Repository
 public interface InvoiceRepository extends MongoRepository<Invoice,String> {
 
-    @Query("{'invoice.invoiceDate' : ?0}")
-    Page<Invoice> getInvoicesByCriteria(LocalDate invoiceDate, Pageable pageable);
+    @Query("{'invoice.invoiceDate' : {$gte: ?0, $lte:?1 }}")
+    Page<Invoice> getInvoicesByCriteria(LocalDate startDate, LocalDate endDate, Pageable pageable);
 
 }
