@@ -33,7 +33,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public Page<Invoice> searchInvoices(LocalDate startDate, LocalDate endDate, int page, int size) {
 
-        return invoiceRepository.getInvoicesByCriteria(startDate, endDate, PageRequest.of(page, size));
+        return invoiceRepository.findByInvoiceDateBetween(startDate, endDate, PageRequest.of(page, size));
     }
 
     @Override
