@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class InvoiceControllerImpl{
 
     InvoiceService invoiceService;
+
     public InvoiceControllerImpl(InvoiceService invoiceService){
         this.invoiceService=invoiceService;
     }
@@ -38,7 +39,7 @@ public class InvoiceControllerImpl{
     }
 
     @GetMapping("search/{date}")
-    public ResponseEntity<Page<Invoice>> search(@PathVariable String date, int page, int size) {
+    public ResponseEntity<Page<Invoice>> search(@PathVariable LocalDate date, int page, int size) {
         return ResponseEntity.ok(invoiceService.searchInvoices(date,page,size));
     }
 }

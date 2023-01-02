@@ -21,7 +21,7 @@ public class Invoice {
     private String id;
     private Customer customer;
     private List<Product> products;
-    private String invoiceDate;
+    private LocalDate invoiceDate;
     private String paymentType;
 
 }

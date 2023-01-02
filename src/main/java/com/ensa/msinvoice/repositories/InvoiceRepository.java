@@ -14,6 +14,6 @@ import java.time.LocalDate;
 public interface InvoiceRepository extends MongoRepository<Invoice,String> {
 
     @Query("{'invoice.invoiceDate' : ?0}")
-    Page<Invoice> getInvoicesByCriteria(String invoiceDate, Pageable pageable);
+    Page<Invoice> getInvoicesByCriteria(LocalDate invoiceDate, Pageable pageable);
 
 }
