@@ -8,12 +8,12 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Repository
 public interface InvoiceRepository extends MongoRepository<Invoice,String> {
 
-    @Query("{'invoice.invoiceDate' : {$gte: ?0, $lte:?1 }}")
-    Page<Invoice> getInvoicesByCriteria(LocalDate startDate, LocalDate endDate, Pageable pageable);
+    Page<Invoice> findByInvoiceDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);
 
 }
