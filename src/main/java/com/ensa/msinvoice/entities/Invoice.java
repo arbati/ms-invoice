@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document
+@Document("invoice")
 public class Invoice {
 
     @Id
