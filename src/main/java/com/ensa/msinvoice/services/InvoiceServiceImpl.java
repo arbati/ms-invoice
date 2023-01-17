@@ -8,7 +8,6 @@ import com.ensa.msinvoice.repositories.InvoiceRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Entity;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -24,7 +23,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     public Optional<Invoice> getInvoiceById(String id) {
-        Optional<Invoice> optionalInvoice= invoiceRepository.findById(id);
+        Optional<Invoice> optionalInvoice = invoiceRepository.findById(id);
 
         if (optionalInvoice.isEmpty()) throw new EntityNotFoundException("Invoice not found");
 
@@ -32,14 +31,18 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
-    public Page<Invoice> searchInvoices(String invoiceDate, int page, int size) {
+    public Page<Invoice> searchInvoices(LocalDate startDate, LocalDate endDate, int page, int size) {
 
-        return invoiceRepository.getInvoicesByCriteria(invoiceDate, PageRequest.of(page, size));
+        return invoiceRepository.findByInvoiceDateBetween(startDate, endDate, PageRequest.of(page, size));
     }
 
     @Override
     public Invoice addInvoice(Invoice invoice) throws DbException {
-      //if(this.getInvoiceById(invoice.getId()).isPresent()) throw new IdAlreadyExistException("Invoice id already exist!");
+
+        Optional<Invoice> optionalInvoice = invoiceRepository.findById(invoice.getId());
+
+        if(!optionalInvoice.isEmpty()) throw new IdAlreadyExistException("Invoice id already exist!");
+
        return invoiceRepository.save(invoice);
 
     }

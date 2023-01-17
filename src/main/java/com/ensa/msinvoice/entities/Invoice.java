@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,14 +15,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document
+@Document("invoice")
 public class Invoice {
 
     @Id
     private String id;
     private Customer customer;
     private List<Product> products;
-    private String invoiceDate;
+    @DateTimeFormat(style = "dd-MM-yyyy")
+    private LocalDate invoiceDate;
     private String paymentType;
 
 }

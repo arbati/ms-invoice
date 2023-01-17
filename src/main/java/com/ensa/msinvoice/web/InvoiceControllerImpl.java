@@ -7,12 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("ms-invoice/v1/invoice")
 public class InvoiceControllerImpl{
 
     InvoiceService invoiceService;
+
     public InvoiceControllerImpl(InvoiceService invoiceService){
         this.invoiceService=invoiceService;
     }
@@ -37,8 +39,13 @@ public class InvoiceControllerImpl{
         return ResponseEntity.ok(invoiceService.addInvoice(invoice));
     }
 
-    @GetMapping("search/{date}")
-    public ResponseEntity<Page<Invoice>> search(@PathVariable String date, int page, int size) {
-        return ResponseEntity.ok(invoiceService.searchInvoices(date,page,size));
+    @GetMapping("/search")
+    public ResponseEntity<Page<Invoice>> search(@RequestParam String startDate, @RequestParam String endDate, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate localDateStart = LocalDate.parse(startDate, formatter);
+        LocalDate localDateEnd = LocalDate.parse(endDate, formatter);
+
+        return ResponseEntity.ok(invoiceService.searchInvoices(localDateStart,localDateEnd,page,size));
     }
 }
