@@ -19,7 +19,7 @@ public class Product {
     private String photo;
     private long depositQuantity;
     @DateTimeFormat(style = "dd-MM-yyyy")
-    private LocalDate expiryDate;
-    private String description;
+    private LocalDate expirationDate;
+    private String shortDescription;
 
 }
