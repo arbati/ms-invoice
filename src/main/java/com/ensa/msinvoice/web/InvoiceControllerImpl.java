@@ -42,7 +42,7 @@ public class InvoiceControllerImpl{
     @GetMapping("/search")
     public ResponseEntity<Page<Invoice>> search(@RequestParam String startDate, @RequestParam String endDate, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDateStart = LocalDate.parse(startDate, formatter);
         LocalDate localDateEnd = LocalDate.parse(endDate, formatter);
 

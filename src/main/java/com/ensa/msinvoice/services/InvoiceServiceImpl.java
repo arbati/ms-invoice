@@ -43,8 +43,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         if(!optionalInvoice.isEmpty()) throw new IdAlreadyExistException("Invoice id already exist!");
 
-       return invoiceRepository.save(invoice);
-
+        return invoiceRepository.save(invoice);
     }
 
     @Override

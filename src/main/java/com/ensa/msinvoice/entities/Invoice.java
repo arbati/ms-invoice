@@ -22,8 +22,9 @@ public class Invoice {
     private String id;
     private Customer customer;
     private List<Product> products;
-    @DateTimeFormat(style = "dd-MM-yyyy")
+    @DateTimeFormat(style = "yyyy-MM-dd")
     private LocalDate invoiceDate;
     private String paymentType;
+    private double discount;
 
 }
