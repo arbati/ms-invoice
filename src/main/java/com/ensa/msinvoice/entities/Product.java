@@ -17,7 +17,7 @@ public class Product {
     private String designation;
     private Double price;
     private String photo;
-    private long quantity;
+    private long depositQuantity;
     @DateTimeFormat(style = "dd-MM-yyyy")
     private LocalDate expirationDate;
     private String shortDescription;

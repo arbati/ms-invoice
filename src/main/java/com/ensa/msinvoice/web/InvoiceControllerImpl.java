@@ -1,6 +1,7 @@
 package com.ensa.msinvoice.web;
 
 import com.ensa.msinvoice.entities.Invoice;
+import com.ensa.msinvoice.entities.InvoiceTotal;
 import com.ensa.msinvoice.services.InvoiceService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("ms-invoice/v1/invoice")
+@RequestMapping("v1/invoice")
 public class InvoiceControllerImpl{
 
     InvoiceService invoiceService;
@@ -48,4 +51,23 @@ public class InvoiceControllerImpl{
 
         return ResponseEntity.ok(invoiceService.searchInvoices(localDateStart,localDateEnd,page,size));
     }
+
+    @GetMapping("/invoiceTotal")
+    public  ResponseEntity<List<InvoiceTotal>> getTotalInvoiceByDay(){
+        List<InvoiceTotal> list = invoiceService.getTotalInvoiceByDay();
+
+        invoiceService.getTotalInvoiceByMonth();
+
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/invoiceMonthTotal")
+    public  ResponseEntity<Map<Integer, Double>> getTotalMonth(){
+
+        Map<Integer, Double> list = invoiceService.getTotalInvoiceByMonth();
+
+        return ResponseEntity.ok(list);
+    }
+
+
 }

@@ -1,21 +1,33 @@
 package com.ensa.msinvoice.services;
 
 import com.ensa.msinvoice.entities.Invoice;
+import com.ensa.msinvoice.entities.InvoiceTotal;
 import com.ensa.msinvoice.exceptions.DbException;
 import com.ensa.msinvoice.exceptions.EntityNotFoundException;
 import com.ensa.msinvoice.exceptions.IdAlreadyExistException;
 import com.ensa.msinvoice.repositories.InvoiceRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.ClientInfoStatus;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @Service
 public class InvoiceServiceImpl implements InvoiceService {
 
     private InvoiceRepository invoiceRepository;
+
+
+    @Autowired
+    private MongoTemplate reactiveMongoTemplate;
 
     public InvoiceServiceImpl(InvoiceRepository invoiceRepository){
         this.invoiceRepository=invoiceRepository;
@@ -56,4 +68,38 @@ public class InvoiceServiceImpl implements InvoiceService {
          invoice.setId(id);
          return invoiceRepository.save(invoice);
     }
+
+
+    @Override
+    public List<InvoiceTotal> getTotalInvoiceByDay(){
+
+      return invoiceRepository.findAll().stream().map(invoice -> {
+           AtomicReference<Double> subTotal= new AtomicReference<>((double) 0);
+           invoice.getProducts().forEach(product -> {
+               subTotal.set(subTotal.get()+(product.getPrice() * product.getDepositQuantity()));
+           });
+
+           double total = subTotal.get()-((subTotal.get()*invoice.getDiscount())/100);
+           return InvoiceTotal.builder().id(invoice.getId()).invoiceDate(invoice.getInvoiceDate()).subtotal(total).build();
+       }).collect(Collectors.toList());
+
+    }
+
+
+    @Override
+    public Map<Integer, Double> getTotalInvoiceByMonth(){
+
+       List<InvoiceTotal> list = getTotalInvoiceByDay();
+
+       Map<Integer, Double> result = list.stream()
+                .collect(Collectors.groupingBy(
+                        item -> item.getInvoiceDate().getMonthValue(),
+                        Collectors.summingDouble(item -> item.getSubtotal())
+                ));
+
+        return  result;
+    }
+
+
+
 }
